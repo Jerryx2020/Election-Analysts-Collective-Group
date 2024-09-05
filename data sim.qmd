@@ -1,0 +1,31 @@
+---
+title: "Data Simulation"
+format: html
+---
+```{r}
+#### Preamble ####
+# Purpose: Simulating data for 2021 Canadian Election
+# Author: Group 17
+# Date: 5 September 2024
+# Prerequisites:
+library(tidyverse)
+library(janitor)
+```
+
+```{r}
+set.seed(583)
+simulated_data <-
+  tibble(
+    # Use 1 through to 151 to represent each division
+    "Division" = 1:338,
+    # Randomly pick an option, with replacement, 151 times
+    "Party" = sample(
+      x = c("Liberal", "Conservative","Bloc Quebecois", "New Democratic", "Green", "other"),
+      size = 338,
+      replace = TRUE
+    )
+  )
+
+simulated_data
+```
+
