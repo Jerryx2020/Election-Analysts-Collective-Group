@@ -1,0 +1,30 @@
+---
+title: "Graph Canadian"
+format: html
+---
+
+```{r}
+#### Preamble ####
+# Purpose: Creating Graph data from 2021 Canadian Election
+# Author: Group 17
+# Date: 5 September 2024
+# Prerequisites: Data Cleaned
+library(tidyverse)
+library(janitor)
+library(tidyr)
+```
+
+```{r}
+cleaned_elections_data |>
+  count(party)
+
+cleaned_elections_data |>
+  ggplot(aes(x = party)) + # aes abbreviates "aesthetics" 
+  geom_bar()
+
+cleaned_elections_data |>
+  ggplot(aes(x = party)) +
+  geom_bar() +
+  theme_minimal() + # Make the theme neater
+  labs(x = "Party", y = "Number of seats") # Make labels more meaningful
+```

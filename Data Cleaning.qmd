@@ -1,0 +1,83 @@
+---
+title: "Data Cleaning"
+format: html
+---
+
+```{r}
+#### Preamble ####
+# Purpose: Cleaning data from 2021 Canadian Election
+# Author: Group 17
+# Date: 5 September 2024
+# Prerequisites: Data Acquired
+library(tidyverse)
+library(janitor)
+library(tidyr)
+```
+
+```{r}
+#### Basic cleaning ####
+raw_elections_data <-
+  read_csv(
+    file = "canadian_voting.csv",
+    show_col_types = FALSE
+  )
+# Make the names easier to type
+cleaned_elections_data <-
+  clean_names(raw_elections_data)
+
+#select 2 columns
+cleaned_elections_data <-
+  cleaned_elections_data |>
+  select(
+    electoral_district_number_numero_de_circonscription,
+    elected_candidate_candidat_elu
+  )
+#rename column
+cleaned_elections_data <-  cleaned_elections_data |>
+  rename(
+    division=electoral_district_number_numero_de_circonscription,
+    elected_party=elected_candidate_candidat_elu
+  )
+
+cleaned_elections_data<-cleaned_elections_data|>
+  separate(
+    col=elected_party,
+    into=c('Other','party'),
+    sep='/'
+  )|>
+  select(-Other)
+
+# check party name
+cleaned_elections_data$party |>
+  
+  unique()
+
+head(cleaned_elections_data)
+
+#rename party
+
+cleaned_elections_data <-
+  cleaned_elections_data |>
+  mutate(
+    party =
+      case_match(
+        party,
+        "Libéral" ~ "Liberal",
+        "Conservateur" ~ "Conservative",
+        "NPD-Nouveau Parti démocratique" ~ "New Democratic",
+        "Parti Vert"~'Green',
+        'Bloc Québécois'~'Bloc Québécois'
+        
+      )
+  )
+
+head(cleaned_elections_data)
+
+write_csv(
+  x = cleaned_elections_data,
+  file = "cleaned_elections_data.csv"
+)
+
+```
+
+
